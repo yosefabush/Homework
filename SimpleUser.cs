@@ -5,6 +5,7 @@ namespace Homework_Project
 	public class SimpleUser:User
 	{
 	
+
         public SimpleUser():base("username","password","email")
         {
 
@@ -19,6 +20,11 @@ namespace Homework_Project
 		public override string ToString(){
 			return base.ToString();
 		}
+
+        public SimpleUser getCurrentUser()
+        {
+            return DataBase.Instance.getCurrentUser();
+        }
 
 	}
 }
