@@ -55,7 +55,8 @@ namespace Homework_Project
             string password = Console.ReadLine();
             Console.Clear();
             int userType = 0;
-            DataBase.Instance.CreateUsers();
+            DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live
+            DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live
             if (DataBase.Instance.isAdmin(username, password))
             {
                 admin = admin.getAdmin(username,password);
@@ -164,7 +165,6 @@ namespace Homework_Project
             while (!exit)
             {
                 int input;
-                
                 while (true)
                 {
                     Console.WriteLine("Welcome " + admin.UserName + "!\n1. Add Task\n2. Add User\n3. Add Teacher\n4. Delete Task\n5. Remove User\n6. Remove Teacher\n" +
@@ -233,7 +233,39 @@ namespace Homework_Project
 
         private static void SimpleUserMenu()
         {
-            Console.WriteLine("hello " + currentUser.UserName + "\nChoose:\n 1 - to mark Tasks\n 2 - to delete mark tasks");
+            bool exit = false;
+            while (!exit)
+            {
+                int input;
+
+                while (true)
+                {
+                    Console.WriteLine("Hello " + currentUser.UserName + "!\n1. Mark Tasks\n2. Delete marked Tasks\n3. Exit");
+                    input = Int32.Parse(Console.ReadLine());
+                    if (input > 0 && input <= 3)
+                        break;
+                    else
+                        Console.WriteLine("Bad Input");
+
+                }
+                Console.Clear();
+                switch (input)
+                {
+
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        exit = true;
+                        LoginMenu();
+                        break;
+
+                    default:
+                        break;
+
+                }
+            }
         }
 
 
