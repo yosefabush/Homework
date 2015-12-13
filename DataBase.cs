@@ -1,246 +1,248 @@
 using System;
 using System.Collections;
-using System.Globalization;
+using System.Collections.Generic;
 
-namespace Homework_Project
-{
-    class MainClass
-    {
-        static ArrayList Users = new ArrayList(); 
-        static AdminUser admin = new AdminUser();
-        static TeacherUser teacher = new TeacherUser();
-        static SimpleUser currentUser = new SimpleUser();
-        public static void Main(string[] args)
+namespace Homework_Project{
+	public class DataBase
+	{
+		private static DataBase instance;
+
+		private DataBase() {  }
+		private static ArrayList Tasks = new ArrayList ();
+        private static List<SimpleUser> Users = new List<SimpleUser>();
+        private ArrayList tasksCopy;
+        private TeacherUser teacher;
+        private AdminUser admin;
+        private SimpleUser currentUser;
+
+		public static DataBase Instance
+		{
+			get 
+			{
+				if (instance == null)
+				{
+					instance = new DataBase();
+				}
+				return instance;
+			}
+		}
+        public ArrayList TasksCopy
         {
-
-
-            while (true)
-            {
-                string input;
-                while (true)
-                {
-                    Console.WriteLine("Welcome to Share Homework!");
-                    Console.WriteLine("1. Login\n2. Sign Up\n\n0. Exit");
-                    input = Console.ReadLine();
-                    if (input != "1" || input != "0" || input != "2")
-                        break;
-                }
-                switch (input)
-                {
-                    case "1":
-                        Console.Clear();
-                        LoginMenu();
-                        break;
-                    case "2":
-                        Console.Clear();
-                        SignupMenu();
-                        break;
-                    case "0":
-                        Console.Clear();
-                        return;
-                       
-                    default:
-                        Console.Clear();
-                        break;
-
-                }
+            get {
+                this.tasksCopy = Tasks;
+                return this.tasksCopy;
             }
         }
 
-        private static void LoginMenu() { 
-            Console.WriteLine("Please Login:");
-            Console.Write("Username: ");
-            string username = Console.ReadLine();
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-            Console.Clear();
-            int userType = 0;
-            DataBase.Instance.CreateUsers();
-            if (DataBase.Instance.isAdmin(username, password))
-            {
-                admin = admin.getAdmin(username,password);
-                userType = 1;
-            }
-            else if (DataBase.Instance.isTeacher(username, password))
-            {
-                teacher = teacher.getTeacher();
-                userType = 2;
-            }
-            else if (DataBase.Instance.isSimpleUser(username, password))
-            {
-                currentUser = currentUser.getCurrentUser();
-                userType = 3;
-            }
-            switch (userType)
-            {
-                case 0:
-                    Console.WriteLine("Username is not in this class...");
-                    break;
-                case 1:
-                    AdminMenu();
-                    break;
-                case 2:
-                    TeacherMenu();
-                    break;
-                case 3:
-                    SimpleUserMenu();
-                    break;
-                default:
-                    break;
-
-            }
-
-        }
-
-        private static void SignupMenu()
+        public void CreateUsers()
         {
-            int userType = 0;
-            string input;
-            bool end = false;
-            while (!end)
+
+            for (int i = 0; i < 5; i++)
             {
-                Console.WriteLine("Choose Account Type:\n" +
-                    "1. Admin\n2. Teacher\n3. User\n\n0. Back");
-                input = Console.ReadLine();
-
-
-                switch (input)
-                {
-                    case "0":
-                        Console.Clear();
-                        return;
-                    case "1":
-                        userType = 1;
-                        end = true;
-                        break;
-                    case "2":
-                        userType = 2;
-                        end = true;
-                        break;
-                    case "3":
-                        userType = 3;
-                        end = true;
-                        break;
-                    default:
-                        Console.Clear();
-                        break;
-                }
-            }
-            
-            Console.Clear();
-            Console.Write("Choose Username: ");
-            string username = Console.ReadLine();
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-            Console.Write("Re-Enter Password: ");
-            string passwordAgain = Console.ReadLine();
-            Console.Write("Enter Email: ");
-            string email = Console.ReadLine();
-            Console.Clear();
-
-            switch (userType)
-            {
-              
-                case 1:
-                    AdminUser au = new AdminUser(username,password,email);
-                    au.createAdmin();
-                    //AdminMenu();
-                    break;
-                case 2:
-                    TeacherMenu();
-                    break;
-                case 3:
-                    SimpleUserMenu();
-                    break;
-                default:
-                    break;
-
-            }
-        }
-
-        private static void AdminMenu()
-        {
-            bool exit = false;
-            while (!exit)
-            {
-                int input;
+                SimpleUser su;
                 
-                while (true)
-                {
-                    Console.WriteLine("Welcome " + admin.UserName + "!\n1. Add Task\n2. Add User\n3. Add Teacher\n4. Delete Task\n5. Remove User\n6. Remove Teacher\n" +
-                        "7. Edit Task Name\n8. Edit Task Deadline\n9. Show All Tasks\n10. Logout\n\n0. Exit");
-                    input = Int32.Parse(Console.ReadLine());
-                    if (input >= 0 && input <= 10)
-                        break;
-                    else
-                        Console.WriteLine("Bad Input");
-
-                }
-                Console.Clear();
-                switch (input)
+                switch (i)
                 {
                     case 0:
-                       // admin = null;
-                        return;
+                        admin = new AdminUser("theKing", "1234abcd", "king@A.com");
+                        teacher = new TeacherUser("Moran", "usa12345", "d@x.com");
+                        su = new SimpleUser("lider", "abcd1234", "a@b.com");
+                        Users.Add(su);
+                        break;
                     case 1:
-
-                        admin.addNewTask();
+                        su = new SimpleUser("Meitar", "abcd1234", "m@t.com");
+                        Users.Add(su);
                         break;
                     case 2:
-                        /*   Console.WriteLine ("Enter User's Email");
-                             string UserEmail = Console.ReadLine ();
-                             SimpleUser su = new SimpleUser("lider", "abcd1234", "a@b.com");
-                             Users.Add(su);  */
+                        su = new SimpleUser("yosef", "abcd1243", "y@g.com");
+                        Users.Add(su);
                         break;
                     case 3:
-
+                        su = new SimpleUser("lior", "fedd4453", "l@b.com");
+                        Users.Add(su);
                         break;
                     case 4:
-                        admin.deleteTask();
-                        break;
-                    case 5:
-
-                        break;
-                    case 6:
-
-                        break;
-                    case 7:
-                        admin.editTaskName();
-                        break;
-                    case 8:
-                        admin.editTaskDeadline();
-                        break;
-                    case 9:
-                        admin.printAllTasks();
-                        break;
-                    case 10:
-                        exit = true;
-                        LoginMenu();
-                        break;
-
-                    default:
+                        su = new SimpleUser("mor", "cfrd3462", "m@t.com");
+                        Users.Add(su);
                         break;
                 }
             }
         }
+        /*************************************Manage Tasks**********************************/
 
-        private static void TeacherMenu()
+        public void addTask(long taskID, string taskName, DateTime deadline){
+			Task t = new Task (taskName, deadline);
+			Tasks.Add (t);
+		}
+
+		public void deleteTask(long taskID)
         {
-            
-            Console.WriteLine("Hello "+ teacher.UserName+"!!");
-            Console.WriteLine("Choose 1 to add Task\n2 for print list of users how finish task");
+			foreach (Task t in Tasks)
+				if (t.TaskID.Equals (taskID))
+					Tasks.Remove (t);
+		}
+
+		public void printTask(long taskID)
+        {
+			foreach (Task t in Tasks)
+				if (t.TaskID.Equals (taskID)) {
+					Console.WriteLine (t);
+					break;
+				}
+		}
+
+		public void printAllTasks(){
+			foreach (Task t in Tasks)
+				Console.WriteLine (t);
+		}
+
+		public void updateTaskName(long taskID, string nameEdit){
+			foreach (Task t in Tasks)
+				if (t.TaskID.Equals (taskID)) {
+					t.TaskName = nameEdit;
+					break;
+				}
+		}
+
+		public void updateTaskDeadline(long taskID, DateTime deadlineEdit){
+			foreach (Task t in Tasks)
+				if (t.TaskID.Equals (taskID)) {
+					t.Deadline = deadlineEdit;
+					break;
+				}
+		}
+
+		public void updateTask(long taskID, string nameEdit, DateTime deadlineEdit){
+			foreach (Task t in Tasks)
+				if (t.TaskID.Equals (taskID)) {
+					t.TaskName = nameEdit;
+					t.Deadline = deadlineEdit;
+					break;
+				}
+		}
+
+		public void markDoneTask(long taskID)
+        {
+			foreach (Task t in Tasks)
+				if (t.TaskID.Equals (taskID)) {
+					t.Status = true;
+					break;
+				}
+		}
+
+        public long getTaskId(string taskName)
+        {
+            foreach (Task t in Tasks)
+                if (t.TaskName.Equals(taskName))
+                    return t.TaskID;
+            return -1;
         }
 
-        private static void SimpleUserMenu()
+        /***********************************Manage Users************************************/
+        public void createAdmin(AdminUser au)
         {
-            Console.WriteLine("hello " + currentUser.UserName + "\nChoose:\n 1 - to mark Tasks\n 2 - to delete mark tasks");
+            if (admin.Equals(null))
+                admin = au;
+        }
+
+        public void addUser(string username, string password, string email)
+        {
+            SimpleUser user = new SimpleUser(username, password, email);
+            Users.Add(user);
+                    
+        }
+
+        public void removeUser(string email)
+        {
+            foreach (SimpleUser su in Users)
+                if (su.Email.Equals(email))
+                {
+                    Users.Remove(su);
+                    break;
+                }
         }
 
 
-       
-        
+        public List<SimpleUser> getAllUsers()
+        {
+            return Users;
+        } 
 
+        public SimpleUser getUser(string email)
+        {
+            foreach(SimpleUser su in Users)
+                if (su.Email.Equals(email))
+                {
+                    return su;
+                }
+            return new SimpleUser();
 
-      
+        }
+
+        public void createTeacher(string username, string password, string email)
+        {
+            if (teacher.Equals(null))
+            {
+                teacher = new TeacherUser(username, password, email);
+            }
+        }
+
+        public void removeTeacher()
+        {
+            teacher = null;
+        }
+
+        public TeacherUser getTeacher()
+        {
+            return teacher;
+        }
+
+        public AdminUser getAdmin()
+        { 
+                return admin;
+        }
+
+        public SimpleUser getCurrentUser()
+        {
+            return currentUser;
+        }
+
+        /***********************************Manage Logins*************************************/
+
+        public bool isAdmin(string username, string password)
+        {
+            if(admin!=null)
+                if (username.Equals(admin.UserName) && password.Equals(admin.Password))
+                   return true;
+
+            return false;
+        }
+
+        public bool isTeacher(string username, string password)
+        {
+            if(teacher!=null)
+                if (username == teacher.UserName && password == teacher.Password)
+                    return true;
+            return false;
+
+        }
+
+        public bool isSimpleUser(string username, string password)
+        {
+            foreach (SimpleUser su in Users)
+            {
+                if (su!=null)
+                    if (su.UserName.Equals(username) && su.Password.Equals(password))
+                    {
+                        currentUser = su;
+                        return true;
+                    }
+
+            }
+            return false;
+
+        }
+
     }
+
 }
