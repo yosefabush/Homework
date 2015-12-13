@@ -10,6 +10,7 @@ namespace Homework_Project
         private static long counter = 0;
 		private long classId;
 
+        public AdminUser() { }
 
 		public AdminUser (string username ,string password, string email):base(username,password,email)
 		{
@@ -182,6 +183,7 @@ namespace Homework_Project
         {
             DataBase.Instance.createAdmin(this);
         } 
+
 
 
     }
