@@ -19,7 +19,13 @@ namespace Homework_Project
                 string input;
                 while (true)
                 {
-                    Console.WriteLine("Welcome to Share Homework!");
+                    Console.WriteLine("\t**********************Welcome to Share Homework!***********************");
+                    Console.WriteLine("\t*\t\t\t\t\t\t\t\t      *");
+                    Console.WriteLine("\t*\t\t\t\t\t\t\t\t      *");
+                    Console.WriteLine("\t*\t\t\t\t\t\t\t\t      *");
+                    Console.WriteLine("\t*\t\t\t\t\t\t\t\t      *");
+                    Console.WriteLine("\t*\t\t\t\t\t\t\t\t      *");
+                    Console.WriteLine("\t*********2015 All rights reserved : Lior,Meitr,Lidor,Yosef ************");
                     Console.WriteLine("1. Login\n2. Sign Up\n\n0. Exit");
                     input = Console.ReadLine();
                     if (input != "1" || input != "0" || input != "2")
@@ -226,9 +232,40 @@ namespace Homework_Project
 
         private static void TeacherMenu()
         {
-            
-            Console.WriteLine("Hello "+ teacher.UserName+"!!");
-            Console.WriteLine("Choose 1 to add Task\n2 for print list of users how finish task");
+
+            bool exit = false;
+            while (!exit)
+            {
+                int input;
+
+                while (true)
+                {
+                    Console.WriteLine("Welcome " + teacher.UserName + "!\n1. Add Task\n2. Print list of users who finished task\n3. Exit");
+                    input = Int32.Parse(Console.ReadLine());
+                    if (input > 0 && input <= 3)
+                        break;
+                    else
+                        Console.WriteLine("Bad Input");
+
+                }
+                Console.Clear();
+                switch (input)
+                {
+
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        exit = true;
+                        LoginMenu();
+                        break;
+
+                    default:
+                        break;
+
+                }
+            }
         }
 
         private static void SimpleUserMenu()
