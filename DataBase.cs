@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Homework_Project{
 	public class DataBase
@@ -34,7 +35,7 @@ namespace Homework_Project{
             }
         }
 
-        public void CreateUsers()
+        public void CreateUsers() //temp - using this function only because database isn't live
         {
 
             for (int i = 0; i < 5; i++)
@@ -68,6 +69,48 @@ namespace Homework_Project{
                 }
             }
         }
+
+        public void CreateTasks() //temp - using this function only because database isn't live
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Task task;
+                string deadlineDate = "19/12/2015";
+                DateTime deadline = DateTime.ParseExact(deadlineDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                switch (i)
+                {
+                    case 0:
+                        
+                        task = new Task("Java - Irit - Sort Person",deadline);
+                        Tasks.Add(task);
+                        break;
+                    case 1:
+                        deadlineDate = "21/12/2015";
+                        deadline = DateTime.ParseExact(deadlineDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        task = new Task("Java - Moran - Sort Cars", deadline);
+                        Tasks.Add(task);
+                        break;
+                    case 2:
+                        deadlineDate = "25/12/2015";
+                        deadline = DateTime.ParseExact(deadlineDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        task = new Task("Assembler - Yosimitsu - check Quiz", deadline);
+                        Tasks.Add(task);
+                        break;
+                    case 3:
+                        deadlineDate = "16/12/2015";
+                        deadline = DateTime.ParseExact(deadlineDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        task = new Task("HTML - Tom - RioOlympics website", deadline);
+                        Tasks.Add(task);
+                        break;
+                    case 4:
+                        deadlineDate = "01/01/2016";
+                        deadline = DateTime.ParseExact(deadlineDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        task = new Task("OS - Shayke - Timing task", deadline);
+                        Tasks.Add(task);
+                        break;
+                }
+            }
+        }
         /*************************************Manage Tasks**********************************/
 
         public void addTask(long taskID, string taskName, DateTime deadline){
@@ -77,9 +120,12 @@ namespace Homework_Project{
 
 		public void deleteTask(long taskID)
         {
-			foreach (Task t in Tasks)
-				if (t.TaskID.Equals (taskID))
-					Tasks.Remove (t);
+            foreach (Task t in Tasks)
+                if (t.TaskID == taskID)
+                {
+                    Tasks.Remove(t);
+                    break;
+                }
 		}
 
 		public void printTask(long taskID)
@@ -193,8 +239,8 @@ namespace Homework_Project{
         }
 
         public TeacherUser getTeacher()
-        {
-            return teacher;
+        { 
+                return teacher;
         }
 
         public AdminUser getAdmin()
