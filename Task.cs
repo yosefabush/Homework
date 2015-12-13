@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Homework_Project
 {
@@ -36,7 +37,8 @@ namespace Homework_Project
 		}
 
 		public override string ToString(){
-			return "Task Name: "+TaskName+ "/nDeadline: "+ deadline.ToString();
+			return "Task Name: " + TaskName+ "\nDeadline: " + deadline.ToString() +
+                "\n      Status: "+ Status.ToString();
 		}
 
 
