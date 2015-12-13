@@ -165,28 +165,49 @@ namespace Homework_Project
         }
 
         /***********************Manage Users************************/
-        public void addUser(string username, string password, string email)
+        public void addUser()
         {
-            List<SimpleUser> Users = DataBase.Instance.getAllUsers();
-            foreach (SimpleUser su in Users)
-                if (su.Email.Equals(email))
+            string userEmail;
+            InputValidation iv = new InputValidation();
+            while (true)
+            {
+                Console.WriteLine("Enter User's Email");
+                userEmail = Console.ReadLine();
+                if (!iv.isValidEmail(userEmail))
                 {
-                    Console.WriteLine("User with this Email already exists");
-                    return;
+                    Console.WriteLine("Not a valid Email");
+                    continue;
                 }
-            DataBase.Instance.addUser(username,password,email);
+                break;
+
+            }
+            List<SimpleUser> Users = getAllUsers();
+            foreach (SimpleUser su in Users)
+                if (su.Email.Equals(userEmail))
+                {
+                    DataBase.Instance.addUser(su);
+                    break;
+                }
+            Console.Clear();
+            Console.WriteLine("No user with that Email was found");
+                
         }
 
-        public void removeUser(string email)
+        public void removeUser()
         {
-            List<SimpleUser> Users = DataBase.Instance.getAllUsers();
+            Console.WriteLine("Enter the Email of User you want to remove: ");
+            string email = Console.ReadLine();
+            List<SimpleUser> Users = getAllUsers();
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(email))
                 {
-                    Console.WriteLine("User with this Email already exists");
+                    Console.Clear();
+                    Console.WriteLine(su.UserName + " was successfuly removed");
+                    DataBase.Instance.removeUser(email);          
                     return;
                 }
-            DataBase.Instance.removeUser(email);
+            Console.Clear();
+            Console.WriteLine("No User with that Email was found");
         }
 
         public SimpleUser getUser(string email)
@@ -194,9 +215,38 @@ namespace Homework_Project
             return DataBase.Instance.getUser(email);
         }
 
-        public void addTeacher(string username, string password, string email)
-        {      
-            DataBase.Instance.createTeacher(username, password, email);
+        public List<SimpleUser> getAllUsers()
+        {
+            return DataBase.Instance.getAllUsers();
+        }
+        public void addTeacher(TeacherUser teacher)
+        {
+            DataBase.Instance.createTeacher(teacher);
+        }
+        public void addTeacher()
+        {
+            string userEmail;
+            InputValidation iv = new InputValidation();
+            while (true)
+            {
+                Console.WriteLine("Enter Teacher's Email");
+                userEmail = Console.ReadLine();
+                if (!iv.isValidEmail(userEmail))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Not a valid Email");
+                    continue;
+                }
+                break;
+            }
+            TeacherUser teacher = DataBase.Instance.getTeacher();
+            if (teacher.Email.Equals(userEmail))
+                DataBase.Instance.createTeacher(teacher);
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("No user with that Email was found");
+            }
         }
 
         public void removeTeacher()
@@ -221,7 +271,17 @@ namespace Homework_Project
             DataBase.Instance.createAdmin(this);
         } 
 
-
+        public void printAllUsers()
+        {
+            List<SimpleUser> Users = getAllUsers();
+            TeacherUser teacher = getTeacher();
+            Console.WriteLine("*********Admin:**********\n"+this);
+            if(!teacher.Equals(null))
+                Console.WriteLine("*********Teacher:**********\n"+teacher);
+            Console.WriteLine("*********Users:**********\n");
+            foreach(SimpleUser su in Users)
+                Console.WriteLine(su);
+        }
 
     }
 
