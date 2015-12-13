@@ -41,17 +41,29 @@ namespace Homework_Project
 			DataBase.Instance.printAllTasks ();
 		}
 
-		public void addNewTask()
-		{
+        public void addNewTask()
+        {
             //get task name from admin user
             Console.WriteLine("Enter Task Name: ");
-            string  taskName = Console.ReadLine();
+            string taskName = Console.ReadLine();
             //get task deadline from admin user
-            Console.WriteLine("Enter Deadline to complete the task(dd/MM/yyyy): ");
-            string  inputDeadline = Console.ReadLine();
+            string inputDeadline = "01/01/1970";
             DateTime deadline = DateTime.ParseExact(inputDeadline, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            while (true) {   //datetime format validation loop, ends when coreect input is entered
+                Console.WriteLine("Enter Deadline to complete the task(dd/MM/yyyy): ");
+                inputDeadline = Console.ReadLine();
+                if (DateTime.TryParseExact(inputDeadline, "dd/MM/yyyy", CultureInfo.InvariantCulture,DateTimeStyles.None, out deadline))
+                {
+                    deadline = DateTime.ParseExact(inputDeadline, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    break;
+                }
+                Console.Clear();
+                Console.WriteLine("Bad Date Format - Use dd/MM/yyyy Only!");
+            }
             //add the task to DataBase
             DataBase.Instance.addTask (ClassID, taskName, deadline);
+            Console.Clear();
+            Console.WriteLine("Task was successfuly added!");
 
 		}
 
@@ -89,18 +101,25 @@ namespace Homework_Project
                 Console.WriteLine("Enter Task Name to edit('-1' to cancel): ");
                 string taskName = Console.ReadLine();
                 if (taskName.Equals("-1"))
+                {
+                    Console.Clear();
                     break;
+                }
                 Console.WriteLine("Enter new Name: ");
                 string taskNameEdit = Console.ReadLine();
                 long taskId = getTaskID(taskName);
                 if (taskId >= 0)
                 {
                     DataBase.Instance.updateTaskName(taskId, taskNameEdit);
+                    Console.Clear();
                     Console.WriteLine("Task was successfuly updated");
                     break;
                 }
                 else
+                {
+                    Console.Clear();
                     Console.WriteLine("No task was found with that name");
+                }
             }
         }
 
@@ -111,19 +130,37 @@ namespace Homework_Project
                 Console.WriteLine("Enter Task Name to edit('-1' to cancel): ");
                 string taskName = Console.ReadLine();
                 if (taskName.Equals("-1"))
+                {
+                    Console.Clear();
                     break;
-                Console.WriteLine("Enter new Deadline date(dd/MM/yyyy): ");
-                string deadlineEdit = Console.ReadLine();
+                }
+                string deadlineEdit = "01/01/1970";
                 DateTime newDeadline = DateTime.ParseExact(deadlineEdit, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                while (true)    //datetime format validation loop, ends when coreect input is entered
+                {
+                    Console.WriteLine("Enter new Deadline date(dd/MM/yyyy): ");
+                    deadlineEdit = Console.ReadLine();
+                    if (DateTime.TryParseExact(deadlineEdit, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out newDeadline))
+                    {
+                        newDeadline = DateTime.ParseExact(deadlineEdit, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        break;
+                    }
+                    Console.Clear();
+                    Console.WriteLine("Bad Date Format - Use dd/MM/yyyy Only!");
+                }
                 long taskId = getTaskID(taskName);
                 if (taskId >= 0)
                 {
-                    DataBase.Instance.updateTaskDeadline (taskId, newDeadline);
+                    DataBase.Instance.updateTaskDeadline(taskId, newDeadline);
+                    Console.Clear();
                     Console.WriteLine("Task was successfuly updated");
                     break;
                 }
                 else
+                {
+                    Console.Clear();
                     Console.WriteLine("No task was found with that name");
+                }
             }
         }
 
