@@ -12,8 +12,6 @@ namespace Homework_Project
         static SimpleUser currentUser = new SimpleUser();
         public static void Main(string[] args)
         {
-
-
             while (true)
             {
                 string input;
@@ -48,7 +46,6 @@ namespace Homework_Project
                     default:
                         Console.Clear();
                         break;
-
                 }
             }
         }
@@ -61,8 +58,8 @@ namespace Homework_Project
             string password = Console.ReadLine();
             Console.Clear();
             int userType = 0;
-            DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live
-            DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live
+            DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live yet
+            DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live yet
             if (DataBase.Instance.isAdmin(username, password))
             {
                 admin = admin.getAdmin(username,password);
@@ -81,7 +78,7 @@ namespace Homework_Project
             switch (userType)
             {
                 case 0:
-                    Console.WriteLine("Username is not in this class...");
+                    Console.WriteLine("Username/Password was wrong, try again");
                     break;
                 case 1:
                     AdminMenu();
