@@ -9,9 +9,15 @@ namespace Homework_Project
 
 
 		}
+        public TeacherUser()
+        {
+
+        }
 
 
-
+        public TeacherUser getTeacher() {
+            return DataBase.Instance.getTeacher();
+        }
 
 
 		public override void Print(){
