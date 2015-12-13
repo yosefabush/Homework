@@ -9,7 +9,7 @@ namespace Homework_Project
         static ArrayList Users = new ArrayList(); 
         static AdminUser admin;
         static TeacherUser teacher;
-        static SimpleUser currentUser;
+        static SimpleUser currentUser = new SimpleUser();
         public static void Main(string[] args)
         {
 
@@ -230,6 +230,8 @@ namespace Homework_Project
 
         private static void SimpleUserMenu()
         {
+            currentUser = currentUser.getCurrentUser();
+
             Console.WriteLine("hello " + currentUser.UserName + "\nChoose:\n 1 - to mark Tasks\n 2 - to delete mark tasks");
         }
 
