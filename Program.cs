@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Homework_Project
 {
@@ -132,28 +134,127 @@ namespace Homework_Project
             }
             
             Console.Clear();
-            Console.Write("Choose Username: ");
-            string username = Console.ReadLine();
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-            Console.Write("Re-Enter Password: ");
-            string passwordAgain = Console.ReadLine();
-            Console.Write("Enter Email: ");
-            string email = Console.ReadLine();
-            Console.Clear();
+            string username="";
+            string password="";
+            string email="";
+            bool exit = false;
+            List<SimpleUser> Users = DataBase.Instance.getAllUsers();
+            while (!exit)
+            {
+                InputValidation iv = new InputValidation();
+                Console.Write("Enter -1 Any Time To Cancel\n");
+                while (true)
+                {
+                    Console.WriteLine("Username must contain at least 4 characters\n" +
+                        "Choose Username: ");
+                    username = Console.ReadLine();
+                    if (username.Equals("-1"))
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    if (!iv.isValidUsername(username))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Not a valid Username");
+                        continue;
+                    }
+                    break;
+                }
+                while (true)
+                {
+                    Console.WriteLine("Password must contain a combination of at least 8 letters and numbers\nChoose Password: ");
+                    password = Console.ReadLine();
+                    if (password.Equals("-1"))
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    if (!(iv.isValidPassword(password)))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Not a valid Password");
+                        Console.WriteLine("Username must contain at least 4 characters\n" +
+                        "Choose Username:\n"+username);
+                        continue;
+                    }
+                    break;
+                }
+                while (true)
+                {
+                    Console.WriteLine("Re-Enter Password: ");
+                    string passwordAgain = Console.ReadLine();
+                    if (passwordAgain.Equals("-1"))
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    if (!(password.Equals(passwordAgain)))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Passwords do not match");
+                        Console.WriteLine("Username must contain at least 4 characters\n" +
+                        "Choose Username:\n" + username);
+                        Console.WriteLine("Password must contain a combination of at least 8 letters and numbers\nChoose Password:\n"+password);
+                        continue;
+                    }
+                    break;
+                }
+                while (true)
+                {
+                    Console.WriteLine("Enter Email: ");
+                    email = Console.ReadLine();
+                    if (email.Equals("-1"))
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    
+                    if (!iv.isValidEmail(email))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Not a Valid Email");
+                        Console.WriteLine("Username must contain at least 4 characters\n" +
+                            "Choose Username:\n" + username);
+                        Console.WriteLine("Password must contain a combination of at least 8 letters and numbers\nChoose Password:\n" + password);
+                        Console.WriteLine("Re-Enter Password:\n"+password);
+                        continue;
+                    }
 
+                    foreach (SimpleUser su in Users)
+                    {
+                        if (su.Email.Equals(email))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("User with that Email already exists");
+                            Console.WriteLine("Username must contain at least 4 characters\n" +
+                                "Choose Username:\n" + username);
+                            Console.WriteLine("Password must contain a combination of at least 8 letters and numbers\nChoose Password:\n" + password);
+                            Console.WriteLine("Re-Enter Password:\n" + password);
+                            continue;
+                        }
+                        break;
+                    }
+                    break;
+                }
+               
+                exit = true;
+                Console.Clear();
+            }
             switch (userType)
             {
               
                 case 1:
-                    AdminUser au = new AdminUser(username,password,email);
-                    au.createAdmin();
-                    //AdminMenu();
+                    admin = new AdminUser(username,password,email);
+                    //admin.createAdmin();
+                    AdminMenu();
                     break;
                 case 2:
+                    teacher = new TeacherUser(username, password, email);
                     TeacherMenu();
                     break;
                 case 3:
+                    currentUser = new SimpleUser(username, password, email);
                     SimpleUserMenu();
                     break;
                 default:
@@ -164,6 +265,8 @@ namespace Homework_Project
 
         private static void AdminMenu()
         {
+            DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live yet
+            DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live yet
             bool exit = false;
             while (!exit)
             {
@@ -171,7 +274,7 @@ namespace Homework_Project
                 while (true)
                 {
                     Console.WriteLine("Welcome " + admin.UserName + "!\n1. Add Task\n2. Add User\n3. Add Teacher\n4. Delete Task\n5. Remove User\n6. Remove Teacher\n" +
-                        "7. Edit Task Name\n8. Edit Task Deadline\n9. Show All Tasks\n10. Logout\n\n0. Exit");
+                        "7. Edit Task Name\n8. Edit Task Deadline\n9. Show All Tasks\n10. Show All Users\n\n0. Exit");
                     input = Int32.Parse(Console.ReadLine());
                     if (input >= 0 && input <= 10)
                         break;
@@ -183,26 +286,23 @@ namespace Homework_Project
                 switch (input)
                 {
                     case 0:
-                       // admin = null;
-                        return;
+                        exit = true;
+                        //  LoginMenu();
+                        break;
                     case 1:
-
                         admin.addNewTask();
                         break;
                     case 2:
-                        /*   Console.WriteLine ("Enter User's Email");
-                             string UserEmail = Console.ReadLine ();
-                             SimpleUser su = new SimpleUser("lider", "abcd1234", "a@b.com");
-                             Users.Add(su);  */
+                        admin.addUser();
                         break;
                     case 3:
-
+                        admin.addTeacher();
                         break;
                     case 4:
                         admin.deleteTask();
                         break;
                     case 5:
-
+                        admin.removeUser();
                         break;
                     case 6:
 
@@ -217,9 +317,9 @@ namespace Homework_Project
                         admin.printAllTasks();
                         break;
                     case 10:
-                        exit = true;
-                        LoginMenu();
+                        admin.printAllUsers();
                         break;
+
 
                     default:
                         break;
@@ -302,11 +402,5 @@ namespace Homework_Project
             }
         }
 
-
-       
-        
-
-
-      
     }
 }
