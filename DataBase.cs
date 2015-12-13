@@ -187,15 +187,13 @@ namespace Homework_Project{
         /***********************************Manage Users************************************/
         public void createAdmin(AdminUser au)
         {
-            if (admin.Equals(null))
+            if (admin.Equals(null) && (!au.Equals(null)))
                 admin = au;
         }
 
-        public void addUser(string username, string password, string email)
+        public void addUser(SimpleUser user)
         {
-            SimpleUser user = new SimpleUser(username, password, email);
-            Users.Add(user);
-                    
+            Users.Add(user);       
         }
 
         public void removeUser(string email)
@@ -225,11 +223,11 @@ namespace Homework_Project{
 
         }
 
-        public void createTeacher(string username, string password, string email)
+        public void createTeacher(TeacherUser teacher)
         {
-            if (teacher.Equals(null))
+            if (this.teacher.Equals(null) && (!teacher.Equals(null)))
             {
-                teacher = new TeacherUser(username, password, email);
+                this.teacher = teacher;
             }
         }
 
