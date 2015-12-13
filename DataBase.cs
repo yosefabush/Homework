@@ -13,6 +13,7 @@ namespace Homework_Project{
         private ArrayList tasksCopy;
         private TeacherUser teacher;
         private AdminUser admin;
+        private SimpleUser currentUser;
 
 		public static DataBase Instance
 		{
@@ -201,6 +202,11 @@ namespace Homework_Project{
                 return admin;
         }
 
+        public SimpleUser getCurrentUser()
+        {
+            return currentUser;
+        }
+
         /***********************************Manage Logins*************************************/
 
         public bool isAdmin(string username, string password)
@@ -228,7 +234,7 @@ namespace Homework_Project{
                 if (su!=null)
                     if (su.UserName.Equals(username) && su.Password.Equals(password))
                     {
-                     //   currentUser = su;
+                        currentUser = su;
                         return true;
                     }
 
