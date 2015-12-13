@@ -7,8 +7,8 @@ namespace Homework_Project
     class MainClass
     {
         static ArrayList Users = new ArrayList(); 
-        static AdminUser admin;
-        static TeacherUser teacher;
+        static AdminUser admin = new AdminUser();
+        static TeacherUser teacher = new TeacherUser();
         static SimpleUser currentUser = new SimpleUser();
         public static void Main(string[] args)
         {
@@ -58,15 +58,17 @@ namespace Homework_Project
             DataBase.Instance.CreateUsers();
             if (DataBase.Instance.isAdmin(username, password))
             {
-                admin = DataBase.Instance.getAdmin();
+                admin = admin.getAdmin(username,password);
                 userType = 1;
             }
             else if (DataBase.Instance.isTeacher(username, password))
             {
+                teacher = teacher.getTeacher();
                 userType = 2;
             }
             else if (DataBase.Instance.isSimpleUser(username, password))
             {
+                currentUser = currentUser.getCurrentUser();
                 userType = 3;
             }
             switch (userType)
@@ -224,14 +226,13 @@ namespace Homework_Project
 
         private static void TeacherMenu()
         {
-            Console.WriteLine("Helo Irit!!");
+            
+            Console.WriteLine("Hello "+ teacher.UserName+"!!");
             Console.WriteLine("Choose 1 to add Task\n2 for print list of users how finish task");
         }
 
         private static void SimpleUserMenu()
         {
-            currentUser = currentUser.getCurrentUser();
-
             Console.WriteLine("hello " + currentUser.UserName + "\nChoose:\n 1 - to mark Tasks\n 2 - to delete mark tasks");
         }
 
