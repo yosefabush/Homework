@@ -185,10 +185,10 @@ namespace Homework_Project{
         }
 
         /***********************************Manage Users************************************/
-        public void createAdmin(AdminUser au)
+        public void createAdmin(AdminUser admin)
         {
-            if (admin.Equals(null) && (!au.Equals(null)))
-                admin = au;
+            if (this.admin.Equals(null) && (!admin.Equals(null)))
+               this.admin = admin;
         }
 
         public void addUser(SimpleUser user)
