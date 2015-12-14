@@ -9,11 +9,11 @@ namespace Homework_Project{
 		private static DataBase instance;
 
 		private DataBase() {  }
-		private static ArrayList Tasks = new ArrayList ();
+		private static List<Task> Tasks = new List<Task> ();
         private static List<SimpleUser> Users = new List<SimpleUser>();
-        private ArrayList tasksCopy;
-        private TeacherUser teacher;
-        private AdminUser admin;
+        private List<Task> tasksCopy;
+        private List<TeacherUser> teachers = new List<TeacherUser>();
+        private List<AdminUser> admins = new List<AdminUser>();
         private SimpleUser currentUser;
 
 		public static DataBase Instance
@@ -27,7 +27,8 @@ namespace Homework_Project{
 				return instance;
 			}
 		}
-        public ArrayList TasksCopy
+
+        public List<Task> TasksCopy
         {
             get {
                 this.tasksCopy = Tasks;
@@ -45,17 +46,22 @@ namespace Homework_Project{
                 switch (i)
                 {
                     case 0:
-                        admin = new AdminUser("theKing", "1234abcd", "king@A.com");
-                        teacher = new TeacherUser("Moran", "usa12345", "d@x.com");
+                        AdminUser admin = new AdminUser("theKing", "1234abcd", "king@A.com");
+                        TeacherUser  teacher = new TeacherUser("Moran", "usa12345", "d@x.com");
+                        teacher.ClassId = 1;
+                        admins.Add(admin);
+                        teachers.Add(teacher);
                         su = new SimpleUser("lider", "abcd1234", "a@b.com");
                         Users.Add(su);
                         break;
                     case 1:
                         su = new SimpleUser("Meitar", "abcd1234", "m@t.com");
+                        su.ClassId = 1;
                         Users.Add(su);
                         break;
                     case 2:
                         su = new SimpleUser("yosef", "abcd1243", "y@g.com");
+                        su.ClassId = 1;
                         Users.Add(su);
                         break;
                     case 3:
@@ -82,6 +88,7 @@ namespace Homework_Project{
                     case 0:
                         
                         task = new Task("Java - Irit - Sort Person",deadline);
+                        task.ClassID = 2;
                         Tasks.Add(task);
                         break;
                     case 1:
@@ -113,15 +120,16 @@ namespace Homework_Project{
         }
         /*************************************Manage Tasks**********************************/
 
-        public void addTask(long taskID, string taskName, DateTime deadline){
+        public void addTask(string taskName, DateTime deadline, long classID){
 			Task t = new Task (taskName, deadline);
+            t.ClassID = classID;
 			Tasks.Add (t);
 		}
 
-		public void deleteTask(long taskID)
+		public void deleteTask(long taskID,long classID)
         {
             foreach (Task t in Tasks)
-                if (t.TaskID == taskID)
+                if (t.TaskID == taskID && t.ClassID==classID)
                 {
                     Tasks.Remove(t);
                     break;
@@ -137,30 +145,31 @@ namespace Homework_Project{
 				}
 		}
 
-		public void printAllTasks(){
+		public void printAllTasks(long classID){
 			foreach (Task t in Tasks)
-				Console.WriteLine (t);
+                    if(t.ClassID==classID)
+				        Console.WriteLine (t);
 		}
 
-		public void updateTaskName(long taskID, string nameEdit){
+		public void updateTaskName(long taskID, string nameEdit,long classID){
 			foreach (Task t in Tasks)
-				if (t.TaskID.Equals (taskID)) {
+				if (t.TaskID.Equals (taskID) && t.ClassID == classID) {
 					t.TaskName = nameEdit;
 					break;
 				}
 		}
 
-		public void updateTaskDeadline(long taskID, DateTime deadlineEdit){
+		public void updateTaskDeadline(long taskID, DateTime deadlineEdit, long classID){
 			foreach (Task t in Tasks)
-				if (t.TaskID.Equals (taskID)) {
+				if (t.TaskID.Equals (taskID) && t.ClassID==classID) {
 					t.Deadline = deadlineEdit;
 					break;
 				}
 		}
 
-		public void updateTask(long taskID, string nameEdit, DateTime deadlineEdit){
+		public void updateTask(long taskID, string nameEdit, DateTime deadlineEdit, long classID){
 			foreach (Task t in Tasks)
-				if (t.TaskID.Equals (taskID)) {
+				if (t.TaskID.Equals (taskID) && t.ClassID == classID) {
 					t.TaskName = nameEdit;
 					t.Deadline = deadlineEdit;
 					break;
@@ -185,31 +194,52 @@ namespace Homework_Project{
         }
 
         /***********************************Manage Users************************************/
-        public void createAdmin(AdminUser admin)
+        public void addAdmin(AdminUser admin)
         {
-            if (this.admin.Equals(null) && (!admin.Equals(null)))
-               this.admin = admin;
+            if (!admin.Equals(null))
+                admins.Add(admin);
         }
 
-        public void addUser(SimpleUser user)
+        public void addUser(SimpleUser user, long classId)
         {
+            Users.Remove(user);
+            user.ClassId = classId;
             Users.Add(user);       
         }
 
-        public void removeUser(string email)
+        public void addTeacher(TeacherUser teacher, long classId)
+        {
+            if (!teacher.Equals(null))
+            {
+                teacher.ClassId = classId;
+                teachers.Add(teacher);
+            }
+        }
+
+        public void removeUser(string email, long classId)
         {
             foreach (SimpleUser su in Users)
-                if (su.Email.Equals(email))
+                if (su.Email.Equals(email) && su.ClassId==classId)
                 {
                     Users.Remove(su);
                     break;
                 }
         }
 
-
-        public List<SimpleUser> getAllUsers()
+        public List<SimpleUser> getAllUsers(long classId)
         {
-            return Users;
+            List<SimpleUser> temp = new List<SimpleUser>();
+            List<SimpleUser> tempAll = new List<SimpleUser>();
+            foreach (SimpleUser su in Users)
+            {
+                if (su.ClassId == classId)
+                    temp.Add(su);
+                if (classId == -1)
+                    tempAll.Add(su);
+            }
+            if(classId!=-1)        
+                return temp;
+            return tempAll;
         } 
 
         public SimpleUser getUser(string email)
@@ -223,27 +253,51 @@ namespace Homework_Project{
 
         }
 
-        public void createTeacher(TeacherUser teacher)
+        public long getUserClassId(string email)
         {
-            if (this.teacher.Equals(null) && (!teacher.Equals(null)))
-            {
-                this.teacher = teacher;
-            }
+            foreach (SimpleUser su in Users)
+                if (su.Email.Equals(email))
+                    return su.ClassId;
+            return -1;
         }
 
-        public void removeTeacher()
+        public void removeTeacher(long classId)
         {
-            teacher = null;
+            foreach (TeacherUser tu in teachers)
+                if (tu.ClassId == classId)
+                    teachers.Remove(tu);
         }
 
-        public TeacherUser getTeacher()
-        { 
-                return teacher;
+        public TeacherUser getTeacher(long classId)
+        {
+            foreach (TeacherUser tu in teachers)
+                if (tu.ClassId.Equals(classId))
+                    return tu;
+            return new TeacherUser();
         }
 
-        public AdminUser getAdmin()
-        { 
-                return admin;
+        public TeacherUser getTeacher(string email)
+        {
+            foreach (TeacherUser tu in teachers)
+                if (tu.Email.Equals(email))
+                    return tu;
+            return new TeacherUser();
+        }
+
+        public long getTeacherClassId(string email)
+        {
+            foreach (TeacherUser tu in teachers)
+                if (tu.Email.Equals(email))
+                    return tu.ClassId;
+            return -1;
+        }
+
+        public AdminUser getAdmin(string email)
+        {
+            foreach (AdminUser au in admins)
+                if (au.Email.Equals(email))
+                    return au;
+             return new AdminUser();   
         }
 
         public SimpleUser getCurrentUser()
@@ -253,37 +307,39 @@ namespace Homework_Project{
 
         /***********************************Manage Logins*************************************/
 
-        public bool isAdmin(string username, string password)
+        public string isAdmin(string username, string password)
         {
-            if(admin!=null)
-                if (username.Equals(admin.UserName) && password.Equals(admin.Password))
-                   return true;
+            foreach(AdminUser admin in admins)
+                if(admin!=null)
+                    if (username.Equals(admin.UserName) && password.Equals(admin.Password))
+                        return admin.Email;
 
-            return false;
+            return "";
         }
 
-        public bool isTeacher(string username, string password)
+        public string isTeacher(string username, string password)
         {
-            if(teacher!=null)
-                if (username == teacher.UserName && password == teacher.Password)
-                    return true;
-            return false;
+            foreach(TeacherUser teacher in teachers)
+                if (teacher!= null)
+                    if (username.Equals(teacher.UserName) && password.Equals(teacher.Password))
+                        return teacher.Email;
+            return "";
 
         }
 
-        public bool isSimpleUser(string username, string password)
+        public string isSimpleUser(string username, string password)
         {
-            foreach (SimpleUser su in Users)
+            foreach (SimpleUser user in Users)
             {
-                if (su!=null)
-                    if (su.UserName.Equals(username) && su.Password.Equals(password))
+                if (user!=null)
+                    if (user.UserName.Equals(username) && user.Password.Equals(password))
                     {
-                        currentUser = su;
-                        return true;
+                        currentUser = user;
+                        return user.Email;
                     }
 
             }
-            return false;
+            return "";
 
         }
 
