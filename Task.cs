@@ -47,9 +47,19 @@ namespace Homework_Project
                 "\n      Status: "+ Status.ToString();
 		}
 
+        public override bool Equals(object obj)
+        {
+            if (TaskName.Equals(((Task)obj).TaskName))
+                return true;
+            return false;
+        }
 
-	
+        public override int GetHashCode()
+        {
+            return 1;
+        }
 
-	}
+
+    }
 }
 
