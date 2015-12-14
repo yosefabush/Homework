@@ -52,6 +52,19 @@ namespace Homework_Project
 			Console.Write ("       ***New-User***\nUserName: "+UserName+"\nPassword: "+Password+"\nEmail: "+Email);
 		}
 
-	}
+        public override bool Equals(object obj)
+        {
+            if(this.Email.Equals(((User)obj).Email))
+                return true;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return 1;
+        }
+
+
+    }
 }
 
