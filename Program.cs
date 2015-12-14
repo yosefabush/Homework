@@ -8,7 +8,7 @@ namespace Homework_Project
 {
     class MainClass
     {
-        static ArrayList Users = new ArrayList(); 
+        static List<SimpleUser> Users = new List<SimpleUser>(); 
         static AdminUser admin = new AdminUser();
         static TeacherUser teacher = new TeacherUser();
         static SimpleUser currentUser = new SimpleUser();
@@ -62,19 +62,19 @@ namespace Homework_Project
             int userType = 0;
             DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live yet
             DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live yet
-            if (DataBase.Instance.isAdmin(username, password))
+            if (DataBase.Instance.isAdmin(username, password)!="")
             {
                 admin = admin.getAdmin(username,password);
                 userType = 1;
             }
-            else if (DataBase.Instance.isTeacher(username, password))
+            else if (DataBase.Instance.isTeacher(username, password)!="")
             {
-                teacher = teacher.getTeacher();
+                teacher = teacher.getTeacher(DataBase.Instance.isTeacher(username, password));
                 userType = 2;
             }
-            else if (DataBase.Instance.isSimpleUser(username, password))
+            else if (DataBase.Instance.isSimpleUser(username, password)!="")
             {
-                currentUser = currentUser.getCurrentUser();
+                currentUser = currentUser.getUser(DataBase.Instance.isSimpleUser(username, password));
                 userType = 3;
             }
             switch (userType)
@@ -138,7 +138,7 @@ namespace Homework_Project
             string password="";
             string email="";
             bool exit = false;
-            List<SimpleUser> Users = DataBase.Instance.getAllUsers();
+            Users = DataBase.Instance.getAllUsers(-1);
             while (!exit)
             {
                 InputValidation iv = new InputValidation();
