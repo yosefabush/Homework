@@ -9,11 +9,11 @@ namespace Homework_Project{
 		private static DataBase instance;
 
 		private DataBase() {  }
-		private static List<Task> Tasks = new List<Task> ();
-        private static List<SimpleUser> Users = new List<SimpleUser>();
-        private List<Task> tasksCopy;
-        private List<TeacherUser> teachers = new List<TeacherUser>();
-        private List<AdminUser> admins = new List<AdminUser>();
+		private static HashSet<Task> Tasks = new HashSet<Task> ();
+        private static HashSet<SimpleUser> Users = new HashSet<SimpleUser>();
+        private HashSet<Task> tasksCopy;
+        private HashSet<TeacherUser> teachers = new HashSet<TeacherUser>();
+        private HashSet<AdminUser> admins = new HashSet<AdminUser>();
         private SimpleUser currentUser;
 
 		public static DataBase Instance
@@ -28,7 +28,7 @@ namespace Homework_Project{
 			}
 		}
 
-        public List<Task> TasksCopy
+        public HashSet<Task> TasksCopy
         {
             get {
                 this.tasksCopy = Tasks;
@@ -69,7 +69,7 @@ namespace Homework_Project{
                         Users.Add(su);
                         break;
                     case 4:
-                        su = new SimpleUser("mor", "cfrd3462", "m@t.com");
+                        su = new SimpleUser("mor", "cfrd3462", "m@o.com");
                         Users.Add(su);
                         break;
                 }
@@ -226,10 +226,10 @@ namespace Homework_Project{
                 }
         }
 
-        public List<SimpleUser> getAllUsers(long classId)
+        public HashSet<SimpleUser> getAllUsers(long classId)
         {
-            List<SimpleUser> temp = new List<SimpleUser>();
-            List<SimpleUser> tempAll = new List<SimpleUser>();
+            HashSet<SimpleUser> temp = new HashSet<SimpleUser>();
+            HashSet<SimpleUser> tempAll = new HashSet<SimpleUser>();
             foreach (SimpleUser su in Users)
             {
                 if (su.ClassId == classId)
