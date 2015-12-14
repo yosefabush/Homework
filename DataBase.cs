@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Homework_Project{
 	public class DataBase
@@ -120,10 +121,17 @@ namespace Homework_Project{
         }
         /*************************************Manage Tasks**********************************/
 
-        public void addTask(string taskName, DateTime deadline, long classID){
+        public bool addTask(string taskName, DateTime deadline, long classID){
 			Task t = new Task (taskName, deadline);
             t.ClassID = classID;
-			Tasks.Add (t);
+            if (Tasks.Contains(t) && t.ClassID == classID)
+                return false;
+            else
+            {
+                Tasks.Add(t);
+                return true;
+            }
+            
 		}
 
 		public void deleteTask(long taskID,long classID)
@@ -200,20 +208,31 @@ namespace Homework_Project{
                 admins.Add(admin);
         }
 
-        public void addUser(SimpleUser user, long classId)
+        public bool addUser(SimpleUser user, long classId)
         {
-            Users.Remove(user);
             user.ClassId = classId;
-            Users.Add(user);       
+            if (Users.Contains(user) && user.ClassId==classId)
+                return false;
+            else
+            {
+                Users.Add(user);
+                return true;
+            }      
         }
 
-        public void addTeacher(TeacherUser teacher, long classId)
+        public bool addTeacher(TeacherUser teacher, long classId)
         {
-            if (!teacher.Equals(null))
+                
+            teacher.ClassId = classId;
+            if (teachers.Contains(teacher) && teacher.ClassId == classId)
+                return false;
+            else
             {
-                teacher.ClassId = classId;
                 teachers.Add(teacher);
+                return true;
             }
+                
+            
         }
 
         public void removeUser(string email, long classId)
@@ -241,6 +260,23 @@ namespace Homework_Project{
                 return temp;
             return tempAll;
         } 
+
+        public HashSet<TeacherUser> getAllTeachers(long classId)
+        {
+            HashSet<TeacherUser> temp = new HashSet<TeacherUser>();
+            HashSet<TeacherUser> tempAll = new HashSet<TeacherUser>();
+            foreach (TeacherUser tu in teachers)
+            {
+                if (tu.ClassId == classId)
+                    temp.Add(tu);
+                if (classId == -1)
+                    tempAll.Add(tu);
+            }
+            if (classId != -1)
+                return temp;
+            return tempAll;
+
+        }
 
         public SimpleUser getUser(string email)
         {
