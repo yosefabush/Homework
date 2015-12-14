@@ -57,7 +57,7 @@ namespace Homework_Project
             Console.Write("Username: ");
             string username = Console.ReadLine();
             Console.Write("Password: ");
-            string password = Console.ReadLine();
+            string password = Console.ReadLine();           
             Console.Clear();
             int userType = 0;
             DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live yet
