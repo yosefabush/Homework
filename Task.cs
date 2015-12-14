@@ -37,7 +37,7 @@ namespace Homework_Project
 		}
 
 		public override string ToString(){
-			return "Task Name: " + TaskName+ "\nDeadline: " + deadline.ToString() +
+			return "Task Name: " + TaskName+ "\nDeadline: " + deadline.ToString("dd/MM/yyyy") +
                 "\n      Status: "+ Status.ToString();
 		}
 
