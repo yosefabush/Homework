@@ -183,7 +183,7 @@ namespace Homework_Project
                 break;
 
             }
-            List<SimpleUser> Users = getAllUsers(-1);
+            HashSet<SimpleUser> Users = getAllUsers(-1);
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(userEmail))
                 {
@@ -201,7 +201,7 @@ namespace Homework_Project
         {
             Console.WriteLine("Enter the Email of User you want to remove: ");
             string email = Console.ReadLine();
-            List<SimpleUser> Users = getAllUsers(ClassID);
+            HashSet<SimpleUser> Users = getAllUsers(ClassID);
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(email)&&su.ClassId==ClassID)
                 {
@@ -215,7 +215,7 @@ namespace Homework_Project
             Console.WriteLine("No User with that Email was found");
         }
 
-        public List<SimpleUser> getAllUsers(long classId)
+        public HashSet<SimpleUser> getAllUsers(long classId)
         {
             return DataBase.Instance.getAllUsers(classId);
         }
@@ -276,7 +276,7 @@ namespace Homework_Project
 
         public void printAllUsers()
         {
-            List<SimpleUser> Users = getAllUsers(ClassID);
+            HashSet<SimpleUser> Users = getAllUsers(ClassID);
             TeacherUser teacher = getTeacher(ClassID);
             Console.WriteLine("*********Admin:**********\n"+this);
             if(teacher.UserName!=(null))
