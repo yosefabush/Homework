@@ -6,7 +6,7 @@ namespace Homework_Project
 	{
 	
 
-        public SimpleUser():base("username","password","email")
+        public SimpleUser():base()
         {
 
         }
@@ -21,9 +21,9 @@ namespace Homework_Project
 			return base.ToString();
 		}
 
-        public SimpleUser getCurrentUser()
+        public SimpleUser getUser(string email)
         {
-            return DataBase.Instance.getCurrentUser();
+            return DataBase.Instance.getUser(email);
         }
 
 	}
