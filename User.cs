@@ -7,7 +7,7 @@ namespace Homework_Project
 		private string username;
 		private string password;
 		private string email;
-
+        private long classId;
 
 		public User (string username,string password,string email)
 		{
@@ -20,6 +20,8 @@ namespace Homework_Project
 		
 
 		}
+
+        public User() { }
 
 		public string UserName{
 			get{return this.username;}
@@ -36,7 +38,13 @@ namespace Homework_Project
 			set{this.email = value;}
 		}
 
-		public override string ToString(){
+        public long ClassId
+        {
+            get { return this.classId; }
+            set { this.classId = value; }
+        }
+
+        public override string ToString(){
 			return "UserName: "+UserName+" Password: "+Password+" Email: "+Email;
 		}
 
