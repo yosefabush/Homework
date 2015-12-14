@@ -8,7 +8,7 @@ namespace Homework_Project
 {
     class MainClass
     {
-        static List<SimpleUser> Users = new List<SimpleUser>(); 
+        static HashSet<SimpleUser> Users = new HashSet<SimpleUser>(); 
         static AdminUser admin = new AdminUser();
         static TeacherUser teacher = new TeacherUser();
         static SimpleUser currentUser = new SimpleUser();
