@@ -38,7 +38,7 @@ namespace Homework_Project
 		}
 
 		public void printAllTasks(){
-			DataBase.Instance.printAllTasks ();
+			DataBase.Instance.printAllTasks (ClassID);
 		}
 
         public void addNewTask()
@@ -61,7 +61,7 @@ namespace Homework_Project
                 Console.WriteLine("Bad Date Format - Use dd/MM/yyyy Only!");
             }
             //add the task to DataBase
-            DataBase.Instance.addTask (ClassID, taskName, deadline);
+            DataBase.Instance.addTask (taskName, deadline,ClassID);
             Console.Clear();
             Console.WriteLine("Task was successfuly added!");
 
@@ -70,19 +70,22 @@ namespace Homework_Project
         public void deleteTask()
         {
             while (true) { 
-                Console.WriteLine("Enter Task Name to delete('-1' to cancel): ");
-                string taskName = Console.ReadLine();
-                if (taskName.Equals("-1"))
+                Console.WriteLine("Enter Task ID to delete('-1' to cancel): ");
+                long taskID = Int32.Parse(Console.ReadLine());
+                if (taskID==-1)
                     break;
-                long taskId = getTaskID(taskName);
-                if (taskId >= 0)
+                if (taskID >= 0)
                 {
-                    DataBase.Instance.deleteTask(taskId);
+                    DataBase.Instance.deleteTask(taskID, ClassID);
+                    Console.Clear();
                     Console.WriteLine("Task was successfuly deleted");
                     break;
                 }
                 else
+                {
+                    Console.Clear();
                     Console.WriteLine("No task was found with that name");
+                }
 
              }
         }
@@ -98,19 +101,18 @@ namespace Homework_Project
         {
             while (true)
             {
-                Console.WriteLine("Enter Task Name to edit('-1' to cancel): ");
-                string taskName = Console.ReadLine();
-                if (taskName.Equals("-1"))
+                Console.WriteLine("Enter Task ID to edit('-1' to cancel): ");
+                long taskID = Int32.Parse(Console.ReadLine());
+                if (taskID == -1)
                 {
                     Console.Clear();
                     break;
                 }
                 Console.WriteLine("Enter new Name: ");
                 string taskNameEdit = Console.ReadLine();
-                long taskId = getTaskID(taskName);
-                if (taskId >= 0)
+                if (taskID >= 0)
                 {
-                    DataBase.Instance.updateTaskName(taskId, taskNameEdit);
+                    DataBase.Instance.updateTaskName(taskID, taskNameEdit,ClassID);
                     Console.Clear();
                     Console.WriteLine("Task was successfuly updated");
                     break;
@@ -151,7 +153,7 @@ namespace Homework_Project
                 long taskId = getTaskID(taskName);
                 if (taskId >= 0)
                 {
-                    DataBase.Instance.updateTaskDeadline(taskId, newDeadline);
+                    DataBase.Instance.updateTaskDeadline(taskId, newDeadline, ClassID);
                     Console.Clear();
                     Console.WriteLine("Task was successfuly updated");
                     break;
@@ -181,12 +183,14 @@ namespace Homework_Project
                 break;
 
             }
-            List<SimpleUser> Users = getAllUsers();
+            List<SimpleUser> Users = getAllUsers(-1);
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(userEmail))
                 {
-                    DataBase.Instance.addUser(su);
-                    break;
+                    DataBase.Instance.addUser(su,ClassId);
+                    Console.Clear();
+                    Console.WriteLine("User was added successfuly!");
+                    return;
                 }
             Console.Clear();
             Console.WriteLine("No user with that Email was found");
@@ -197,32 +201,30 @@ namespace Homework_Project
         {
             Console.WriteLine("Enter the Email of User you want to remove: ");
             string email = Console.ReadLine();
-            List<SimpleUser> Users = getAllUsers();
+            List<SimpleUser> Users = getAllUsers(ClassID);
             foreach (SimpleUser su in Users)
-                if (su.Email.Equals(email))
+                if (su.Email.Equals(email)&&su.ClassId==ClassID)
                 {
                     Console.Clear();
                     Console.WriteLine(su.UserName + " was successfuly removed");
-                    DataBase.Instance.removeUser(email);          
+                    long classId = DataBase.Instance.getUserClassId(email);
+                    DataBase.Instance.removeUser(email,classId);          
                     return;
                 }
             Console.Clear();
             Console.WriteLine("No User with that Email was found");
         }
 
-        public SimpleUser getUser(string email)
+        public List<SimpleUser> getAllUsers(long classId)
         {
-            return DataBase.Instance.getUser(email);
+            return DataBase.Instance.getAllUsers(classId);
         }
 
-        public List<SimpleUser> getAllUsers()
-        {
-            return DataBase.Instance.getAllUsers();
-        }
         public void addTeacher(TeacherUser teacher)
         {
-            DataBase.Instance.createTeacher(teacher);
+            DataBase.Instance.addTeacher(teacher,ClassId);
         }
+
         public void addTeacher()
         {
             string userEmail;
@@ -239,9 +241,10 @@ namespace Homework_Project
                 }
                 break;
             }
-            TeacherUser teacher = DataBase.Instance.getTeacher();
-            if (teacher.Email.Equals(userEmail))
-                DataBase.Instance.createTeacher(teacher);
+            long classId = DataBase.Instance.getTeacherClassId(userEmail);
+            TeacherUser teacher = DataBase.Instance.getTeacher(classId);
+            if (!teacher.Equals(null))
+                DataBase.Instance.addTeacher(teacher,ClassId);
             else
             {
                 Console.Clear();
@@ -251,32 +254,32 @@ namespace Homework_Project
 
         public void removeTeacher()
         {
-            DataBase.Instance.removeTeacher();
+            DataBase.Instance.removeTeacher(ClassID);
         }
 
-        public TeacherUser getTeacher()
+        public TeacherUser getTeacher(long classId)
         {
-            return DataBase.Instance.getTeacher();
+            return DataBase.Instance.getTeacher(classId);
         }
 
         public AdminUser getAdmin(string username, string password)
         {
-            if(DataBase.Instance.isAdmin(username, password))
-                return DataBase.Instance.getAdmin();
-            return new AdminUser("","","");
+            if(DataBase.Instance.isAdmin(username, password)!="")
+                return DataBase.Instance.getAdmin(DataBase.Instance.isAdmin(username, password));
+            return new AdminUser();
         }
 
-        public void createAdmin()
+        public void addAdmin()
         {
-            DataBase.Instance.createAdmin(this);
+            DataBase.Instance.addAdmin(this);
         } 
 
         public void printAllUsers()
         {
-            List<SimpleUser> Users = getAllUsers();
-            TeacherUser teacher = getTeacher();
+            List<SimpleUser> Users = getAllUsers(ClassID);
+            TeacherUser teacher = getTeacher(ClassID);
             Console.WriteLine("*********Admin:**********\n"+this);
-            if(!teacher.Equals(null))
+            if(teacher.UserName!=(null))
                 Console.WriteLine("*********Teacher:**********\n"+teacher);
             Console.WriteLine("*********Users:**********\n");
             foreach(SimpleUser su in Users)
