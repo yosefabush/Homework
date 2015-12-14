@@ -9,14 +9,14 @@ namespace Homework_Project
 
 
 		}
-        public TeacherUser()
+        public TeacherUser():base()
         {
 
         }
 
 
-        public TeacherUser getTeacher() {
-            return DataBase.Instance.getTeacher();
+        public TeacherUser getTeacher(string email) {
+            return DataBase.Instance.getTeacher(email);
         }
 
 
