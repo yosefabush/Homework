@@ -61,9 +61,15 @@ namespace Homework_Project
                 Console.WriteLine("Bad Date Format - Use dd/MM/yyyy Only!");
             }
             //add the task to DataBase
-            DataBase.Instance.addTask (taskName, deadline,ClassID);
-            Console.Clear();
-            Console.WriteLine("Task was successfuly added!");
+            if (DataBase.Instance.addTask(taskName, deadline, ClassID))
+            {
+                Console.Clear();
+                Console.WriteLine("Task was successfuly added!");
+            }
+            else {
+                Console.Clear();
+                Console.WriteLine("Task already exists");
+            }
 
 		}
 
@@ -187,10 +193,17 @@ namespace Homework_Project
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(userEmail))
                 {
-                    DataBase.Instance.addUser(su,ClassId);
-                    Console.Clear();
-                    Console.WriteLine("User was added successfuly!");
-                    return;
+                    if (DataBase.Instance.addUser(su, ClassId))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("User was added successfuly!");
+                        return;
+                    }
+                    else {
+                        Console.Clear();
+                        Console.WriteLine("User already exists");
+                        return;
+                    }
                 }
             Console.Clear();
             Console.WriteLine("No user with that Email was found");
@@ -220,20 +233,57 @@ namespace Homework_Project
             return DataBase.Instance.getAllUsers(classId);
         }
 
+        public HashSet<TeacherUser> getAllTeachers(long classId)
+        {
+            return DataBase.Instance.getAllTeachers(classId);
+        }
+
         public void addTeacher(TeacherUser teacher)
         {
-            DataBase.Instance.addTeacher(teacher,ClassId);
+            string teacherEmail;
+            InputValidation iv = new InputValidation();
+            while (true)
+            {
+                Console.WriteLine("Enter User's Email");
+                teacherEmail = Console.ReadLine();
+                if (!iv.isValidEmail(teacherEmail))
+                {
+                    Console.WriteLine("Not a valid Email");
+                    continue;
+                }
+                break;
+
+            }
+            HashSet<TeacherUser> Teachers = getAllTeachers(-1);
+            foreach (TeacherUser tu in Teachers)
+                if (tu.Email.Equals(teacherEmail))
+                {
+                    if (DataBase.Instance.addUser(tu, ClassId))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Teacher was added successfuly!");
+                        return;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Teacher already exists");
+                        return;
+                    }
+                }
+            Console.Clear();
+            Console.WriteLine("No Teacher with that Email was found");
         }
 
         public void addTeacher()
         {
-            string userEmail;
+            string teacherEmail;
             InputValidation iv = new InputValidation();
             while (true)
             {
                 Console.WriteLine("Enter Teacher's Email");
-                userEmail = Console.ReadLine();
-                if (!iv.isValidEmail(userEmail))
+                teacherEmail = Console.ReadLine();
+                if (!iv.isValidEmail(teacherEmail))
                 {
                     Console.Clear();
                     Console.WriteLine("Not a valid Email");
@@ -241,15 +291,25 @@ namespace Homework_Project
                 }
                 break;
             }
-            long classId = DataBase.Instance.getTeacherClassId(userEmail);
-            TeacherUser teacher = DataBase.Instance.getTeacher(classId);
-            if (!teacher.Equals(null))
-                DataBase.Instance.addTeacher(teacher,ClassId);
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("No user with that Email was found");
-            }
+            HashSet<TeacherUser> Teachers = getAllTeachers(-1);
+            foreach (TeacherUser tu in Teachers)
+                if (tu.Email.Equals(teacherEmail))
+                {
+                    if (DataBase.Instance.addTeacher(tu, ClassId))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Teacher was added successfuly!");
+                        return;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Teacher already exists");
+                        return;
+                    }
+                }
+            Console.Clear();
+            Console.WriteLine("No Teacher with that Email was found");
         }
 
         public void removeTeacher()
