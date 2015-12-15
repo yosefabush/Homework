@@ -9,16 +9,15 @@ namespace Homework_Project
 
 
 		}
+
         public TeacherUser():base()
         {
 
         }
 
-
         public TeacherUser getTeacher(string email) {
             return DataBase.Instance.getTeacher(email);
         }
-
 
 		public override void Print(){
 			base.Print ();
