@@ -49,7 +49,7 @@ namespace Homework_Project{
                     case 0:
                         AdminUser admin = new AdminUser("theKing", "1234abcd", "king@A.com");
                         TeacherUser  teacher = new TeacherUser("Moran", "usa12345", "d@x.com");
-                        teacher.ClassId = 1;
+                        teacher.ClassID = 1;
                         admins.Add(admin);
                         teachers.Add(teacher);
                         su = new SimpleUser("lider", "abcd1234", "a@b.com");
@@ -57,12 +57,12 @@ namespace Homework_Project{
                         break;
                     case 1:
                         su = new SimpleUser("Meitar", "abcd1234", "m@t.com");
-                        su.ClassId = 1;
+                        su.ClassID = 1;
                         Users.Add(su);
                         break;
                     case 2:
                         su = new SimpleUser("yosef", "abcd1243", "y@g.com");
-                        su.ClassId = 1;
+                        su.ClassID = 2;
                         Users.Add(su);
                         break;
                     case 3:
@@ -155,9 +155,25 @@ namespace Homework_Project{
 
 		public void printAllTasks(long classID){
 			foreach (Task t in Tasks)
-                    if(t.ClassID==classID)
+                    if(t.ClassID==classID && t.Status==false)
 				        Console.WriteLine (t);
 		}
+
+        public void printAllTasksIncMarked(long classID)
+        {
+            foreach (Task t in Tasks)
+                if (t.ClassID == classID)
+                    Console.WriteLine(t);
+        }
+
+        public HashSet<Task> getMyTasks(long classId)
+        {
+            HashSet<Task> temp = new HashSet<Task>();
+            foreach (Task t in Tasks)
+                if (t.ClassID == classId)
+                    temp.Add(t);
+            return temp;
+        }
 
 		public void updateTaskName(long taskID, string nameEdit,long classID){
 			foreach (Task t in Tasks)
@@ -184,13 +200,14 @@ namespace Homework_Project{
 				}
 		}
 
-		public void markDoneTask(long taskID)
+		public bool markTask(long taskID, long ClassId, bool status)
         {
 			foreach (Task t in Tasks)
-				if (t.TaskID.Equals (taskID)) {
-					t.Status = true;
-					break;
+				if (t.TaskID==taskID && t.ClassID==ClassId) {
+					t.Status = status;
+					return true;
 				}
+            return false;
 		}
 
         public long getTaskId(string taskName)
@@ -210,11 +227,12 @@ namespace Homework_Project{
 
         public bool addUser(SimpleUser user, long classId)
         {
-            user.ClassId = classId;
-            if (Users.Contains(user) && user.ClassId==classId)
+            user.ClassID = classId;
+            if (Users.Contains(user) && user.ClassID==classId)
                 return false;
             else
             {
+                user.getTasks();
                 Users.Add(user);
                 return true;
             }      
@@ -223,8 +241,8 @@ namespace Homework_Project{
         public bool addTeacher(TeacherUser teacher, long classId)
         {
                 
-            teacher.ClassId = classId;
-            if (teachers.Contains(teacher) && teacher.ClassId == classId)
+            teacher.ClassID = classId;
+            if (teachers.Contains(teacher) && teacher.ClassID == classId)
                 return false;
             else
             {
@@ -238,7 +256,7 @@ namespace Homework_Project{
         public void removeUser(string email, long classId)
         {
             foreach (SimpleUser su in Users)
-                if (su.Email.Equals(email) && su.ClassId==classId)
+                if (su.Email.Equals(email) && su.ClassID==classId)
                 {
                     Users.Remove(su);
                     break;
@@ -251,7 +269,7 @@ namespace Homework_Project{
             HashSet<SimpleUser> tempAll = new HashSet<SimpleUser>();
             foreach (SimpleUser su in Users)
             {
-                if (su.ClassId == classId)
+                if (su.ClassID == classId)
                     temp.Add(su);
                 if (classId == -1)
                     tempAll.Add(su);
@@ -267,7 +285,7 @@ namespace Homework_Project{
             HashSet<TeacherUser> tempAll = new HashSet<TeacherUser>();
             foreach (TeacherUser tu in teachers)
             {
-                if (tu.ClassId == classId)
+                if (tu.ClassID == classId)
                     temp.Add(tu);
                 if (classId == -1)
                     tempAll.Add(tu);
@@ -293,21 +311,21 @@ namespace Homework_Project{
         {
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(email))
-                    return su.ClassId;
+                    return su.ClassID;
             return -1;
         }
 
         public void removeTeacher(long classId)
         {
             foreach (TeacherUser tu in teachers)
-                if (tu.ClassId == classId)
+                if (tu.ClassID == classId)
                     teachers.Remove(tu);
         }
 
         public TeacherUser getTeacher(long classId)
         {
             foreach (TeacherUser tu in teachers)
-                if (tu.ClassId.Equals(classId))
+                if (tu.ClassID.Equals(classId))
                     return tu;
             return new TeacherUser();
         }
@@ -324,7 +342,7 @@ namespace Homework_Project{
         {
             foreach (TeacherUser tu in teachers)
                 if (tu.Email.Equals(email))
-                    return tu.ClassId;
+                    return tu.ClassID;
             return -1;
         }
 
