@@ -2,8 +2,8 @@ using System;
 
 namespace Homework_Project
 {
-	public abstract class User
-	{
+	public abstract class User: IPrintTasks
+    {
 		private string username;
 		private string password;
 		private string email;
@@ -38,7 +38,7 @@ namespace Homework_Project
 			set{this.email = value;}
 		}
 
-        public long ClassId
+        public long ClassID
         {
             get { return this.classId; }
             set { this.classId = value; }
@@ -54,7 +54,7 @@ namespace Homework_Project
 
         public override bool Equals(object obj)
         {
-            if(this.Email.Equals(((User)obj).Email))
+            if(Email.Equals(((User)obj).Email))
                 return true;
             return false;
         }
@@ -64,7 +64,15 @@ namespace Homework_Project
             return 1;
         }
 
+        public void printAllTasks()
+        {
+            DataBase.Instance.printAllTasks(ClassID);
+        }
 
+        public void printAllTasksIncMarked()
+        {
+            DataBase.Instance.printAllTasksIncMarked(ClassID);
+        }
     }
 }
 
