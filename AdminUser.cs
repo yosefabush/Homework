@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace Homework_Project
 {
-	public class AdminUser:SimpleUser
+	public class AdminUser:SimpleUser,IMarkDone
 	{
         private static long counter = 0;
 		private long classId;
@@ -33,12 +33,31 @@ namespace Homework_Project
 
         /***********************Manage Tasks************************/
 
-		public void markDoneTask(long courseId){
-			DataBase.Instance.markDoneTask (courseId);
-		}
+		public new void markTask(bool status){
+            while (true)
+            {
+                Console.WriteLine("Enter Task ID to mark('-1' to cancel): ");
+                long taskID = Int32.Parse(Console.ReadLine());
+                if (taskID == -1)
+                    break;
+                if (taskID >= 0)
+                {
+                    if (DataBase.Instance.markTask(taskID, ClassID, status))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Task was successfuly marked");
+                        break;
+                    }
 
-		public void printAllTasks(){
-			DataBase.Instance.printAllTasks (ClassID);
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("No task was found with that ID");
+                    }
+                }
+
+            }
+            
 		}
 
         public void addNewTask()
@@ -193,7 +212,7 @@ namespace Homework_Project
             foreach (SimpleUser su in Users)
                 if (su.Email.Equals(userEmail))
                 {
-                    if (DataBase.Instance.addUser(su, ClassId))
+                    if (DataBase.Instance.addUser(su, base.ClassID))
                     {
                         Console.Clear();
                         Console.WriteLine("User was added successfuly!");
@@ -216,7 +235,7 @@ namespace Homework_Project
             string email = Console.ReadLine();
             HashSet<SimpleUser> Users = getAllUsers(ClassID);
             foreach (SimpleUser su in Users)
-                if (su.Email.Equals(email)&&su.ClassId==ClassID)
+                if (su.Email.Equals(email)&&su.ClassID==ClassID)
                 {
                     Console.Clear();
                     Console.WriteLine(su.UserName + " was successfuly removed");
@@ -258,7 +277,7 @@ namespace Homework_Project
             foreach (TeacherUser tu in Teachers)
                 if (tu.Email.Equals(teacherEmail))
                 {
-                    if (DataBase.Instance.addUser(tu, ClassId))
+                    if (DataBase.Instance.addUser(tu, base.ClassID))
                     {
                         Console.Clear();
                         Console.WriteLine("Teacher was added successfuly!");
@@ -295,7 +314,7 @@ namespace Homework_Project
             foreach (TeacherUser tu in Teachers)
                 if (tu.Email.Equals(teacherEmail))
                 {
-                    if (DataBase.Instance.addTeacher(tu, ClassId))
+                    if (DataBase.Instance.addTeacher(tu, base.ClassID))
                     {
                         Console.Clear();
                         Console.WriteLine("Teacher was added successfuly!");
