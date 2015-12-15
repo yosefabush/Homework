@@ -263,7 +263,7 @@ namespace Homework_Project
             }
         }
 
-        private static void AdminMenu()
+        private static void AdminMenu()//need to add menu for admin tools, seperated from personal tools
         {
             DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live yet
             DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live yet
@@ -274,9 +274,9 @@ namespace Homework_Project
                 while (true)
                 {
                     Console.WriteLine("Welcome " + admin.UserName + "!\n1. Add Task\n2. Add User\n3. Add Teacher\n4. Delete Task\n5. Remove User\n6. Remove Teacher\n" +
-                        "7. Edit Task Name\n8. Edit Task Deadline\n9. Show All Tasks\n10. Show All Users\n\n0. Exit");
+                        "7. Edit Task Name\n8. Edit Task Deadline\n9. Show All Tasks\n10. Show All Users\n11. Mark Task as Done\n12. Mark Task as Undone\n\n0. Logout");
                     input = Int32.Parse(Console.ReadLine());
-                    if (input >= 0 && input <= 10)
+                    if (input >= 0 && input <= 12)
                         break;
                     else
                         Console.WriteLine("Bad Input");
@@ -287,7 +287,6 @@ namespace Homework_Project
                 {
                     case 0:
                         exit = true;
-                        //  LoginMenu();
                         break;
                     case 1:
                         admin.addNewTask();
@@ -319,7 +318,12 @@ namespace Homework_Project
                     case 10:
                         admin.printAllUsers();
                         break;
-
+                    case 11:
+                        admin.markTask(true);
+                        break;
+                    case 12:
+                        admin.markTask(false);
+                        break;
 
                     default:
                         break;
@@ -337,9 +341,9 @@ namespace Homework_Project
 
                 while (true)
                 {
-                    Console.WriteLine("Welcome " + teacher.UserName + "!\n1. Add Task\n2. Print list of users who finished task\n3. Exit");
+                    Console.WriteLine("Welcome " + teacher.UserName + "!\n1. Add Task\n2. Print list of users who finished task\n\n0. Logout");
                     input = Int32.Parse(Console.ReadLine());
-                    if (input > 0 && input <= 3)
+                    if (input >= 0 && input <= 2)
                         break;
                     else
                         Console.WriteLine("Bad Input");
@@ -374,27 +378,35 @@ namespace Homework_Project
 
                 while (true)
                 {
-                    Console.WriteLine("Hello " + currentUser.UserName + "!\n1. Mark Tasks\n2. Delete marked Tasks\n3. Exit");
+                    Console.WriteLine("Hello " + currentUser.UserName + "!\n1. Show All Tasks \n2. Show All Tasks (Include Done Tasks)\n"+
+                        "3. Mark Task as Done\n4. Mark Task as Undone\n\n0. Logout");
                     input = Int32.Parse(Console.ReadLine());
-                    if (input > 0 && input <= 3)
+                    if (input >= 0 && input <= 4)
                         break;
                     else
                         Console.WriteLine("Bad Input");
 
                 }
                 Console.Clear();
+                currentUser.getTasks(); //temp
                 switch (input)
                 {
-
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
+                    case 0:
                         exit = true;
                         LoginMenu();
                         break;
-
+                    case 1:
+                        currentUser.printAllTasks();
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        currentUser.markTask(true);
+                        break;
+                    case 4:
+                        currentUser.markTask(false);
+                        break;
                     default:
                         break;
 
