@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace Homework_Project
 {
-	public class SimpleUser:User
+	public class SimpleUser:User,IMarkDone
 	{
-	
+        private HashSet<Task> localTasks = new HashSet<Task>();
 
         public SimpleUser():base()
         {
@@ -26,6 +27,41 @@ namespace Homework_Project
             return DataBase.Instance.getUser(email);
         }
 
-	}
+        public void getTasks()
+        {
+            localTasks = DataBase.Instance.getMyTasks(ClassID);
+        }
+
+        public void markTask(bool status)
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter Task ID to mark('-1' to cancel): ");
+                long taskID = Int32.Parse(Console.ReadLine());
+                if (taskID == -1)
+                {
+                    Console.Clear();
+                    break;
+                }
+                if (taskID >= 0)
+                {
+                    foreach (Task t in localTasks)
+                    {
+                        if (t.TaskID == taskID)
+                        {
+                            t.Status = status;
+                            Console.Clear();
+                            Console.WriteLine("Task was successfuly marked");
+                            return;
+                        }
+                    }
+                    Console.Clear();
+                    Console.WriteLine("No task was found with that ID");
+                }
+            }
+        }
+
+
+    }
 }
 
