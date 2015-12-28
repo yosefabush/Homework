@@ -12,7 +12,6 @@ namespace Homework_Project{
 		private DataBase() {  }
 		private static HashSet<Task> Tasks = new HashSet<Task> ();
         private static HashSet<SimpleUser> Users = new HashSet<SimpleUser>();
-        private HashSet<Task> tasksCopy;
         private HashSet<TeacherUser> teachers = new HashSet<TeacherUser>();
         private HashSet<AdminUser> admins = new HashSet<AdminUser>();
         private SimpleUser currentUser;
@@ -28,14 +27,8 @@ namespace Homework_Project{
 				return instance;
 			}
 		}
+        
 
-        public HashSet<Task> TasksCopy
-        {
-            get {
-                this.tasksCopy = Tasks;
-                return this.tasksCopy;
-            }
-        }
 
         public void CreateUsers() //temp - using this function only because database isn't live
         {
