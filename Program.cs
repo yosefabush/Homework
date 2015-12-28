@@ -52,7 +52,8 @@ namespace Homework_Project
             }
         }
 
-        private static void LoginMenu() { 
+        private static void LoginMenu()/////////-1///////////
+        { 
             Console.WriteLine("Please Login:");
             Console.Write("Username: ");
             string username = Console.ReadLine();
@@ -263,7 +264,7 @@ namespace Homework_Project
             }
         }
 
-        private static void AdminMenu()//need to add menu for admin tools, seperated from personal tools
+        private static void AdminMenu()//need to add menu for admin tools, seperated from personal tools, add exit from add user
         {
             DataBase.Instance.CreateUsers();        //temp - using this function only because database isn't live yet
             DataBase.Instance.CreateTasks();        //temp - using this function only because database isn't live yet
@@ -378,7 +379,7 @@ namespace Homework_Project
 
                 while (true)
                 {
-                    Console.WriteLine("Hello " + currentUser.UserName + "!\n1. Show All Tasks \n2. Show All Tasks (Include Done Tasks)\n"+
+                    Console.WriteLine("Welcome " + currentUser.UserName + "!\n1. Show All Tasks \n2. Show All Tasks (Include Done Tasks)\n"+
                         "3. Mark Task as Done\n4. Mark Task as Undone\n\n0. Logout");
                     input = Int32.Parse(Console.ReadLine());
                     if (input >= 0 && input <= 4)
