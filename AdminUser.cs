@@ -23,7 +23,7 @@ namespace Homework_Project
 			get{return this.classId;}
 			set{this.classId = value;}
 		}
-
+	//Boynjo
 		public override void Print(){
 			base.Print ();
 
