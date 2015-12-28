@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 
 namespace Homework_Project
 {
-	public class AdminUser:SimpleUser,IMarkDone
+	public class AdminUser:SimpleUser,IMarkTask
 	{
         private static long counter = 0;
 		private long classId;
@@ -57,20 +56,31 @@ namespace Homework_Project
                 }
 
             }
-            
-		}
+
+        }/////////-1///////////
 
         public void addNewTask()
         {
+            Console.WriteLine("Enter '-1' any time to go BACK\n");
             //get task name from admin user
             Console.WriteLine("Enter Task Name: ");
             string taskName = Console.ReadLine();
+            if (taskName.Equals("-1"))
+            {
+                Console.Clear();
+                return;
+            }
             //get task deadline from admin user
             string inputDeadline = "01/01/1970";
             DateTime deadline = DateTime.ParseExact(inputDeadline, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             while (true) {   //datetime format validation loop, ends when coreect input is entered
                 Console.WriteLine("Enter Deadline to complete the task(dd/MM/yyyy): ");
                 inputDeadline = Console.ReadLine();
+                if (inputDeadline.Equals("-1"))
+                {
+                    Console.Clear();
+                    return;
+                }
                 if (DateTime.TryParseExact(inputDeadline, "dd/MM/yyyy", CultureInfo.InvariantCulture,DateTimeStyles.None, out deadline))
                 {
                     deadline = DateTime.ParseExact(inputDeadline, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -94,9 +104,16 @@ namespace Homework_Project
 
         public void deleteTask()
         {
-            while (true) { 
-                Console.WriteLine("Enter Task ID to delete('-1' to cancel): ");
+            while (true) {
+
+                Console.WriteLine("Enter '-1' any time to go BACK\n");
+                Console.WriteLine("Enter Task ID to delete: ");
                 long taskID = Int32.Parse(Console.ReadLine());
+                if (taskID==-1)
+                {
+                    Console.Clear();
+                    return;
+                }
                 if (taskID==-1)
                     break;
                 if (taskID >= 0)
@@ -126,7 +143,8 @@ namespace Homework_Project
         {
             while (true)
             {
-                Console.WriteLine("Enter Task ID to edit('-1' to cancel): ");
+                Console.WriteLine("Enter '-1' any time to go BACK\n");
+                Console.WriteLine("Enter Task ID to edit: ");
                 long taskID = Int32.Parse(Console.ReadLine());
                 if (taskID == -1)
                 {
@@ -135,6 +153,11 @@ namespace Homework_Project
                 }
                 Console.WriteLine("Enter new Name: ");
                 string taskNameEdit = Console.ReadLine();
+                if (taskNameEdit.Equals("-1"))
+                {
+                    Console.Clear();
+                    break;
+                }
                 if (taskID >= 0)
                 {
                     DataBase.Instance.updateTaskName(taskID, taskNameEdit,ClassID);
@@ -154,7 +177,8 @@ namespace Homework_Project
         {
             while (true)
             {
-                Console.WriteLine("Enter Task Name to edit('-1' to cancel): ");
+                Console.WriteLine("Enter '-1' any time to go BACK\n");
+                Console.WriteLine("Enter Task Name to edit: ");
                 string taskName = Console.ReadLine();
                 if (taskName.Equals("-1"))
                 {
@@ -192,7 +216,7 @@ namespace Homework_Project
         }
 
         /***********************Manage Users************************/
-        public void addUser()
+        public void addUser()/////////-1///////////
         {
             string userEmail;
             InputValidation iv = new InputValidation();
@@ -202,6 +226,7 @@ namespace Homework_Project
                 userEmail = Console.ReadLine();
                 if (!iv.isValidEmail(userEmail))
                 {
+                    Console.Clear();
                     Console.WriteLine("Not a valid Email");
                     continue;
                 }
@@ -229,7 +254,7 @@ namespace Homework_Project
                 
         }
 
-        public void removeUser()
+        public void removeUser()/////////-1///////////
         {
             Console.WriteLine("Enter the Email of User you want to remove: ");
             string email = Console.ReadLine();
@@ -257,7 +282,7 @@ namespace Homework_Project
             return DataBase.Instance.getAllTeachers(classId);
         }
 
-        public void addTeacher(TeacherUser teacher)
+        public void addTeacher(TeacherUser teacher)/////////-1///////////
         {
             string teacherEmail;
             InputValidation iv = new InputValidation();
@@ -294,7 +319,7 @@ namespace Homework_Project
             Console.WriteLine("No Teacher with that Email was found");
         }
 
-        public void addTeacher()
+        public void addTeacher()/////////-1///////////
         {
             string teacherEmail;
             InputValidation iv = new InputValidation();
@@ -331,7 +356,7 @@ namespace Homework_Project
             Console.WriteLine("No Teacher with that Email was found");
         }
 
-        public void removeTeacher()
+        public void removeTeacher()/////////Rebulid///////////
         {
             DataBase.Instance.removeTeacher(ClassID);
         }
