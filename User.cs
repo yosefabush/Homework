@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Homework_Project
 {
@@ -8,8 +9,9 @@ namespace Homework_Project
 		private string password;
 		private string email;
         private long classId;
+        private HashSet<Task> localTasks = new HashSet<Task>();
 
-		public User (string username,string password,string email)
+        public User (string username,string password,string email)
 		{
 			if(username.Length>0)
 				UserName = username;
@@ -72,6 +74,19 @@ namespace Homework_Project
         public void printAllTasksIncMarked()
         {
             DataBase.Instance.printAllTasksIncMarked(ClassID);
+        }
+
+        public HashSet<Task> LocalTasks
+        {
+            get { return this.localTasks; }
+            set
+            {
+                foreach (Task T in value)
+                {
+                    this.localTasks.Add(T);
+                }
+            }
+
         }
     }
 }
