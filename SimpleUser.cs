@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Homework_Project
 {
-	public class SimpleUser:User,IMarkDone
+	public class SimpleUser:User,IMarkTask
 	{
         private HashSet<Task> localTasks = new HashSet<Task>();
 
@@ -32,7 +32,7 @@ namespace Homework_Project
             localTasks = DataBase.Instance.getMyTasks(ClassID);
         }
 
-        public void markTask(bool status)
+        public void markTask(bool status)/////////-1///////////
         {
             while (true)
             {
